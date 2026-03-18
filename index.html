@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Static Pages</title>
+  <title>Discord Pages</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
- 
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
       font-size: 14px;
@@ -16,7 +16,7 @@
       max-width: 980px;
       margin: 0 auto;
     }
- 
+
     .page-header {
       display: flex;
       align-items: center;
@@ -25,7 +25,7 @@
     }
     .discord-logo { width: 28px; height: 28px; fill: #5865f2; flex-shrink: 0; }
     .page-title { font-size: 18px; font-weight: 600; color: #24292f; }
- 
+
     .breadcrumb {
       display: flex;
       align-items: center;
@@ -38,7 +38,7 @@
     .crumb:hover { text-decoration: underline; background: #f6f8fa; }
     .crumb-sep { color: #57606a; padding: 0 2px; }
     .crumb-current { color: #24292f; font-weight: 600; padding: 2px 4px; }
- 
+
     .search-bar {
       width: 100%;
       padding: 8px 12px;
@@ -51,9 +51,9 @@
       background: #ffffff;
     }
     .search-bar:focus { border-color: #0969da; box-shadow: 0 0 0 3px rgba(9,105,218,0.12); }
- 
+
     .stat-bar { font-size: 12px; color: #57606a; margin-bottom: 10px; min-height: 18px; }
- 
+
     .table { width: 100%; border: 1px solid #d0d7de; border-radius: 6px; overflow: hidden; }
     .table-header {
       background: #f6f8fa;
@@ -78,14 +78,14 @@
     }
     .row:last-child { border-bottom: none; }
     .row:hover { background: #f6f8fa; }
- 
+
     .cell-name { display: flex; align-items: center; gap: 8px; min-width: 0; }
     .name-text { color: #0969da; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .row:hover .name-text { text-decoration: underline; }
- 
+
     .cell-size { font-size: 12px; color: #57606a; text-align: right; }
     .cell-badge { text-align: right; }
- 
+
     .badge {
       display: inline-block;
       font-size: 11px;
@@ -98,14 +98,23 @@
     .badge-html  { background: #ddf4ff; color: #0550ae; border: 1px solid #b6e3ff; }
     .badge-image { background: #ffebe9; color: #a40000; border: 1px solid #ffb8b0; }
     .badge-other { background: #f6f8fa; color: #57606a; border: 1px solid #d0d7de; }
- 
+
     .icon { width: 16px; height: 16px; flex-shrink: 0; fill: #57606a; }
     .icon-dir  { fill: #54aeff; }
     .icon-html { fill: #5865f2; }
- 
+
     .empty { padding: 48px; text-align: center; color: #57606a; }
-    .error-msg { padding: 12px 16px; background: #fff8c5; border: 1px solid #d4a72c; border-radius: 6px; font-size: 13px; color: #57606a; margin-bottom: 14px; display: none; }
- 
+    .error-msg {
+      padding: 12px 16px;
+      background: #fff8c5;
+      border: 1px solid #d4a72c;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #57606a;
+      margin-bottom: 14px;
+      display: none;
+    }
+
     @media (prefers-color-scheme: dark) {
       body { background: #0d1117; color: #e6edf3; }
       .page-title { color: #e6edf3; }
@@ -135,19 +144,16 @@
   </style>
 </head>
 <body>
- 
+
 <div class="page-header">
-  <svg class="discord-logo" viewBox="0 0 127.14 96.36">
-    <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
-  </svg>
-  <span class="page-title">Discord Pages</span>
+  <span class="page-title">Static Pages</span>
 </div>
- 
+
 <div class="breadcrumb" id="breadcrumb"></div>
 <div class="error-msg" id="error-msg"></div>
 <input class="search-bar" id="search" type="text" placeholder="Filter files and folders…" />
 <div class="stat-bar" id="stat-bar"></div>
- 
+
 <div class="table">
   <div class="table-header">
     <span>Name</span>
@@ -156,63 +162,66 @@
   </div>
   <div id="listing"></div>
 </div>
- 
+
 <script>
   const ICONS = {
-    dir:   `<svg class="icon icon-dir"  viewBox="0 0 16 16"><path d="M1.75 1A1.75 1.75 0 0 0 0 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0 0 16 13.25v-8.5A1.75 1.75 0 0 0 14.25 3H7.5L5.982 1.482A1.75 1.75 0 0 0 4.74 1H1.75Z"/></svg>`,
-    html:  `<svg class="icon icon-html" viewBox="0 0 16 16"><path d="M2.75 0A1.75 1.75 0 0 0 1 1.75v12.5C1 15.216 1.784 16 2.75 16h10.5A1.75 1.75 0 0 0 15 14.25V4.414a.25.25 0 0 0-.073-.177L10.68.677A.25.25 0 0 0 10.5.604H2.75ZM2.5 1.75a.25.25 0 0 1 .25-.25H10v2.5c0 .966.784 1.75 1.75 1.75h2.5v8.5a.25.25 0 0 1-.25.25H2.75a.25.25 0 0 1-.25-.25Zm9.5 1.43V2.353l1.947 1.947H12.25a.25.25 0 0 1-.25-.25Z"/></svg>`,
-    file:  `<svg class="icon"           viewBox="0 0 16 16"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688Z"/></svg>`,
+    dir:  `<svg class="icon icon-dir"  viewBox="0 0 16 16"><path d="M1.75 1A1.75 1.75 0 0 0 0 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0 0 16 13.25v-8.5A1.75 1.75 0 0 0 14.25 3H7.5L5.982 1.482A1.75 1.75 0 0 0 4.74 1H1.75Z"/></svg>`,
+    html: `<svg class="icon icon-html" viewBox="0 0 16 16"><path d="M2.75 0A1.75 1.75 0 0 0 1 1.75v12.5C1 15.216 1.784 16 2.75 16h10.5A1.75 1.75 0 0 0 15 14.25V4.414a.25.25 0 0 0-.073-.177L10.68.677A.25.25 0 0 0 10.5.604H2.75ZM2.5 1.75a.25.25 0 0 1 .25-.25H10v2.5c0 .966.784 1.75 1.75 1.75h2.5v8.5a.25.25 0 0 1-.25.25H2.75a.25.25 0 0 1-.25-.25Zm9.5 1.43V2.353l1.947 1.947H12.25a.25.25 0 0 1-.25-.25Z"/></svg>`,
+    file: `<svg class="icon"           viewBox="0 0 16 16"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688Z"/></svg>`,
   };
- 
+
   let TREE = null;
   let stack = [];
- 
+
   function getBaseUrl() {
     const loc = window.location.href.split('?')[0].split('#')[0];
     return loc.endsWith('/') ? loc : loc.substring(0, loc.lastIndexOf('/') + 1);
   }
- 
+
+  const BASE_URL = getBaseUrl();
+
   function showError(msg) {
     const el = document.getElementById('error-msg');
     el.style.display = 'block';
     el.textContent = msg;
   }
- 
+
   function ext(name) {
     const i = name.lastIndexOf('.');
     return i >= 0 ? name.slice(i + 1).toLowerCase() : '';
   }
- 
+
   function badgeFor(name) {
     const e = ext(name);
-    if (['html', 'htm'].includes(e)) return ['badge-html', 'HTML'];
-    if (['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'ico'].includes(e)) return ['badge-image', 'Image'];
-    if (['js', 'ts', 'jsx', 'tsx'].includes(e)) return ['badge-other', 'JS'];
-    if (['css', 'scss'].includes(e)) return ['badge-other', 'CSS'];
-    if (['json'].includes(e)) return ['badge-other', 'JSON'];
-    if (['md', 'txt'].includes(e)) return ['badge-other', e.toUpperCase()];
+    if (['html', 'htm'].includes(e))                           return ['badge-html',  'HTML'];
+    if (['png','jpg','jpeg','gif','webp','svg','ico'].includes(e)) return ['badge-image', 'Image'];
+    if (['js','ts','jsx','tsx'].includes(e))                   return ['badge-other', 'JS'];
+    if (['css','scss'].includes(e))                            return ['badge-other', 'CSS'];
+    if (e === 'json')                                          return ['badge-other', 'JSON'];
+    if (['mp3','wav','ogg','flac','m4a'].includes(e))          return ['badge-other', 'Audio'];
+    if (['mp4','webm','mov'].includes(e))                      return ['badge-other', 'Video'];
+    if (['md','txt'].includes(e))                              return ['badge-other', e.toUpperCase()];
     return ['badge-other', e.toUpperCase() || 'File'];
   }
- 
+
   function iconFor(name) {
     const e = ext(name);
     if (['html', 'htm'].includes(e)) return ICONS.html;
     return ICONS.file;
   }
- 
+
   function formatSize(bytes) {
     if (bytes == null) return '';
     if (bytes < 1024) return bytes + ' B';
     if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
     return (bytes / 1048576).toFixed(1) + ' MB';
   }
- 
-  function escHtml(s) {
+
+  function esc(s) {
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
- 
+
   function currentNode() {
-    if (!TREE) return null;
     let node = TREE;
     for (const seg of stack) {
       node = node[seg.label];
@@ -220,33 +229,38 @@
     }
     return node;
   }
- 
-  function currentUrl() {
-    const base = getBaseUrl();
-    return base + stack.map(s => s.label + '/').join('');
+
+  function fileUrl(filename) {
+    return BASE_URL + stack.map(s => s.label + '/').join('') + filename;
   }
- 
+
   function renderBreadcrumb() {
     const el = document.getElementById('breadcrumb');
     el.innerHTML = '';
- 
-    const rootSpan = document.createElement('span');
+
+    const rootLabel = (window.location.hostname || 'root') +
+                      (window.location.pathname.replace(/\/$/, '') || '');
+
     if (stack.length === 0) {
-      rootSpan.className = 'crumb-current';
-      rootSpan.textContent = window.location.hostname || 'root';
-    } else {
-      rootSpan.className = 'crumb';
-      rootSpan.textContent = window.location.hostname || 'root';
-      rootSpan.onclick = () => { stack = []; render(); };
+      const s = document.createElement('span');
+      s.className = 'crumb-current';
+      s.textContent = rootLabel;
+      el.appendChild(s);
+      return;
     }
-    el.appendChild(rootSpan);
- 
+
+    const root = document.createElement('span');
+    root.className = 'crumb';
+    root.textContent = rootLabel;
+    root.onclick = () => { stack = []; render(); };
+    el.appendChild(root);
+
     stack.forEach((seg, i) => {
       const sep = document.createElement('span');
       sep.className = 'crumb-sep';
       sep.textContent = '/';
       el.appendChild(sep);
- 
+
       const crumb = document.createElement('span');
       const isLast = i === stack.length - 1;
       crumb.className = isLast ? 'crumb-current' : 'crumb';
@@ -257,26 +271,31 @@
       el.appendChild(crumb);
     });
   }
- 
-  function render(filterText) {
+
+  function render(filterOverride) {
     renderBreadcrumb();
     const node = currentNode();
     const listing = document.getElementById('listing');
     const statBar = document.getElementById('stat-bar');
     listing.innerHTML = '';
- 
+
     if (!node) {
       listing.innerHTML = '<div class="empty">Directory not found.</div>';
       return;
     }
- 
-    const filter = (filterText || document.getElementById('search').value).toLowerCase().trim();
-    const dirs = Object.keys(node).filter(k => k !== '__files__').sort();
+
+    const filter = (filterOverride !== undefined
+      ? filterOverride
+      : document.getElementById('search').value
+    ).toLowerCase().trim();
+
+    const dirs  = Object.keys(node).filter(k => k !== '__files__').sort();
     const files = (node['__files__'] || []).slice().sort((a, b) => a.name.localeCompare(b.name));
-    const filteredDirs  = filter ? dirs.filter(d => d.toLowerCase().includes(filter)) : dirs;
-    const filteredFiles = filter ? files.filter(f => f.name.toLowerCase().includes(filter)) : files;
- 
+
+    const filteredDirs  = filter ? dirs.filter(d => d.toLowerCase().includes(filter))        : dirs;
+    const filteredFiles = filter ? files.filter(f => f.name.toLowerCase().includes(filter))  : files;
     const total = filteredDirs.length + filteredFiles.length;
+
     statBar.textContent = filter
       ? `${total} result${total !== 1 ? 's' : ''} matching "${filter}"`
       : `${dirs.length} folder${dirs.length !== 1 ? 's' : ''}, ${files.length} file${files.length !== 1 ? 's' : ''}`;
@@ -284,15 +303,11 @@
     if (stack.length > 0) {
       const row = document.createElement('div');
       row.className = 'row';
-      row.innerHTML = `
-        <div class="cell-name">${ICONS.dir}<span class="name-text">..</span></div>
-        <div class="cell-size"></div>
-        <div class="cell-badge"></div>
-      `;
+      row.innerHTML = `<div class="cell-name">${ICONS.dir}<span class="name-text">..</span></div><div class="cell-size"></div><div class="cell-badge"></div>`;
       row.onclick = () => { stack = stack.slice(0, -1); render(); };
       listing.appendChild(row);
     }
- 
+
     if (total === 0 && filter) {
       listing.innerHTML += '<div class="empty">No matches found.</div>';
       return;
@@ -301,38 +316,37 @@
       listing.innerHTML += '<div class="empty">This directory is empty.</div>';
       return;
     }
- 
+
     filteredDirs.forEach(name => {
       const row = document.createElement('div');
       row.className = 'row';
       row.innerHTML = `
-        <div class="cell-name">${ICONS.dir}<span class="name-text">${escHtml(name)}</span></div>
+        <div class="cell-name">${ICONS.dir}<span class="name-text">${esc(name)}</span></div>
         <div class="cell-size">—</div>
-        <div class="cell-badge"><span class="badge badge-dir">Folder</span></div>
-      `;
-      row.onclick = () => { stack = [...stack, { label: name }]; render(); };
+        <div class="cell-badge"><span class="badge badge-dir">Folder</span></div>`;
+      row.onclick = () => {
+        stack = [...stack, { label: name }];
+        render();
+      };
       listing.appendChild(row);
     });
 
     filteredFiles.forEach(f => {
       const [badgeClass, badgeLabel] = badgeFor(f.name);
-      const icon = iconFor(f.name);
-      const fileUrl = currentUrl() + f.name;
       const row = document.createElement('div');
       row.className = 'row';
       row.innerHTML = `
-        <div class="cell-name">${icon}<span class="name-text">${escHtml(f.name)}</span></div>
-        <div class="cell-size">${escHtml(formatSize(f.size))}</div>
-        <div class="cell-badge"><span class="badge ${badgeClass}">${badgeLabel}</span></div>
-      `;
-      row.onclick = () => window.open(fileUrl, '_blank');
+        <div class="cell-name">${iconFor(f.name)}<span class="name-text">${esc(f.name)}</span></div>
+        <div class="cell-size">${esc(formatSize(f.size))}</div>
+        <div class="cell-badge"><span class="badge ${badgeClass}">${badgeLabel}</span></div>`;
+      row.onclick = () => window.open(fileUrl(f.name), '_blank');
       listing.appendChild(row);
     });
   }
 
   document.getElementById('search').addEventListener('input', e => render(e.target.value));
- 
-  fetch(getBaseUrl() + 'files.json')
+
+  fetch(BASE_URL + 'files.json')
     .then(r => {
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.json();
@@ -342,7 +356,7 @@
       render();
     })
     .catch(err => {
-      showError('Could not load files.json (' + err.message + '). Make sure the GitHub Actions workflow has run and the file exists at the root of your site.');
+      showError('Could not load files.json (' + err.message + '). Make sure the GitHub Actions workflow has run.');
       document.getElementById('listing').innerHTML = '<div class="empty">Waiting for manifest…</div>';
     });
 </script>
