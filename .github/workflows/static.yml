@@ -27,17 +27,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build site into staging directory
+      - name: Generate files.json and disable Jekyll
         run: |
-          # Copy entire repo into _site/ (excluding .git and .github)
-          rsync -a --exclude='.git' --exclude='.github' . _site/
+          # Disable Jekyll so GitHub Pages serves files directly
+          touch .nojekyll
 
-          # Generate files.json directly inside _site/
           python3 << 'PYEOF'
-          import os, json, sys
+          import os, json
 
-          IGNORE = {'.git', '.github', '_site', 'node_modules', '.DS_Store'}
-          ROOT = '_site'
+          IGNORE = {'.git', '.github', 'node_modules', '.DS_Store'}
 
           def build_tree(root):
               tree = {}
@@ -60,21 +58,17 @@ jobs:
                   ]
               return tree
 
-          tree = build_tree(ROOT)
-          out = os.path.join(ROOT, 'files.json')
-          with open(out, 'w') as fh:
+          tree = build_tree('.')
+          with open('files.json', 'w') as fh:
               json.dump(tree, fh, separators=(',', ':'))
 
-          print(f"files.json written to {out} ({os.path.getsize(out)} bytes)")
+          print(f"files.json written ({os.path.getsize('files.json')} bytes)")
           PYEOF
 
-      - name: Verify staging directory
+      - name: Verify
         run: |
-          echo "=== _site/ root ==="
-          ls -la _site/
-          echo ""
-          echo "=== files.json preview ==="
-          python3 -c "import json; d=json.load(open('_site/files.json')); print(list(d.keys()))"
+          ls -la files.json .nojekyll
+          python3 -c "import json; d=json.load(open('files.json')); print('Root keys:', list(d.keys()))"
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -82,7 +76,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '_site'
+          path: '.'
 
       - name: Deploy to GitHub Pages
         id: deployment
