@@ -15,25 +15,29 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Generate files.json manifest
+      - name: Build site into staging directory
         run: |
+          # Copy entire repo into _site/ (excluding .git and .github)
+          rsync -a --exclude='.git' --exclude='.github' . _site/
+
+          # Generate files.json directly inside _site/
           python3 << 'PYEOF'
           import os, json, sys
 
-          IGNORE = {'.git', '.github', 'node_modules', '.DS_Store'}
+          IGNORE = {'.git', '.github', '_site', 'node_modules', '.DS_Store'}
+          ROOT = '_site'
 
           def build_tree(root):
               tree = {}
@@ -51,32 +55,26 @@ jobs:
                           node = node.setdefault(part, {})
 
                   node['__files__'] = [
-                      {
-                          'name': f,
-                          'size': os.path.getsize(os.path.join(dirpath, f))
-                      }
+                      {'name': f, 'size': os.path.getsize(os.path.join(dirpath, f))}
                       for f in filenames
                   ]
               return tree
 
-          tree = build_tree('.')
-          out_path = os.path.join('.', 'files.json')
-          with open(out_path, 'w') as fh:
+          tree = build_tree(ROOT)
+          out = os.path.join(ROOT, 'files.json')
+          with open(out, 'w') as fh:
               json.dump(tree, fh, separators=(',', ':'))
 
-          size = os.path.getsize(out_path)
-          print(f"files.json written ({size} bytes)")
-          sys.exit(0)
+          print(f"files.json written to {out} ({os.path.getsize(out)} bytes)")
           PYEOF
 
-      - name: Verify files.json exists
+      - name: Verify staging directory
         run: |
-          if [ ! -f files.json ]; then
-            echo "ERROR: files.json was not created!"
-            exit 1
-          fi
-          echo "files.json OK — $(wc -c < files.json) bytes"
-          echo "Root keys: $(python3 -c "import json; d=json.load(open('files.json')); print(list(d.keys())[:10])")"
+          echo "=== _site/ root ==="
+          ls -la _site/
+          echo ""
+          echo "=== files.json preview ==="
+          python3 -c "import json; d=json.load(open('_site/files.json')); print(list(d.keys()))"
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -84,7 +82,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: '_site'
 
       - name: Deploy to GitHub Pages
         id: deployment
