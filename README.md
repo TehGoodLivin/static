@@ -1,4 +1,4 @@
-# Static File Builder & JSON Directory Browser
+# Static File Builder
 This repository generates a JSON file from source data and hosts it—along with a simple directory‑style index.html browser—using GitHub Pages. It provides a lightweight way to publish structured data and static assets without a backend or API server.
 
 ## Purpose of This Repository
