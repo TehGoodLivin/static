@@ -2,27 +2,20 @@
 name: Deploy static content to Pages
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
   deploy:
     environment:
       name: github-pages
@@ -31,13 +24,55 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Generate files.json manifest
+        run: |
+          python3 - <<'EOF'
+          import os, json
+
+          IGNORE = {'.git', '.github', 'node_modules', '.DS_Store'}
+
+          def build_tree(root):
+              tree = {}
+              for dirpath, dirnames, filenames in os.walk(root):
+                  # Prune ignored dirs in-place so os.walk skips them
+                  dirnames[:] = sorted(d for d in dirnames if d not in IGNORE)
+                  filenames = sorted(f for f in filenames if f not in IGNORE)
+
+                  rel = os.path.relpath(dirpath, root)
+                  rel = '' if rel == '.' else rel
+
+                  node = tree
+                  if rel:
+                      for part in rel.replace('\\', '/').split('/'):
+                          node = node.setdefault(part, {})
+
+                  node['__files__'] = [
+                      {
+                          'name': f,
+                          'size': os.path.getsize(os.path.join(dirpath, f))
+                      }
+                      for f in filenames
+                      if f != 'files.json'
+                  ]
+
+              return tree
+
+          tree = build_tree('.')
+          with open('files.json', 'w') as fh:
+              json.dump(tree, fh, separators=(',', ':'))
+
+          print('files.json written')
+          EOF
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
           path: '.'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
