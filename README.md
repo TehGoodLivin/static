@@ -7,3 +7,7 @@ This repository generates a JSON file from source data and hosts it—along with
 - Hosts all static files—including the generated JSON—via GitHub Pages
 - Provides an index.html that acts as a simple directory browser so users can navigate and open files directly
 - Requires no build pipeline, no deployment steps, and no separate output folder
+
+
+## License
+- https://github.com/TehGoodLivin/license
