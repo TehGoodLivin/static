@@ -3,8 +3,8 @@
 import os
 import json
 
-IGNORE_DIRS = {".git", ".github", ".claude", "node_modules"}
-IGNORE_FILES = {"files.json", "generate_manifest.py", "LICENSE", "README.md"}
+IGNORE_DIRS = {".git"}
+IGNORE_FILES = {"LICENSE", "README.md"}
 
 
 def build_tree(root):
