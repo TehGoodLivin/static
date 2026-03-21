@@ -3,15 +3,15 @@
 import os
 import json
 
-IGNORE = {".git", ".github", ".claude", "node_modules", ".DS_Store"}
-IGNORE_FILES = {"files.json", "generate_manifest.py"}
+IGNORE_DIRS = {".git", ".github", ".claude", "node_modules"}
+IGNORE_FILES = {"files.json", "generate_manifest.py", "LICENSE", "README.md"}
 
 
 def build_tree(root):
     tree = {}
     for dirpath, dirnames, filenames in os.walk(root, topdown=True):
-        dirnames[:] = sorted(d for d in dirnames if d not in IGNORE)
-        filenames = sorted(f for f in filenames if f not in IGNORE and f not in IGNORE_FILES)
+        dirnames[:] = sorted(d for d in dirnames if d not in IGNORE_DIRS and not d.startswith("."))
+        filenames = sorted(f for f in filenames if f not in IGNORE_FILES and not f.startswith("."))
 
         rel = os.path.relpath(dirpath, root)
         if rel == ".":
